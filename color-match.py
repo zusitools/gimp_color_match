@@ -8,44 +8,12 @@ def color_match(img, drawable):
   fgcolor = pdb.gimp_context_get_foreground()
   bgcolor = pdb.gimp_context_get_background()
 
-  samples = " ".join(map(lambda x: "{:.5f}".format(x/255.0), range(0,256)))
-  points_unused = "-1.0 -1.0" * 14
+  default_line = "0 0 " + ("-1 -1 " * 15) + "255 255" + os.linesep
+  red_line = "0 0 " + str(bgcolor[0]) + " " + str(fgcolor[0]) + " " + ("-1 -1 " * 14) + "255 255" + os.linesep
+  green_line = "0 0 " + str(bgcolor[1]) + " " + str(fgcolor[1]) + " " + ("-1 -1 " * 14) + "255 255" + os.linesep
+  blue_line = "0 0 " + str(bgcolor[2]) + " " + str(fgcolor[2]) + " " + ("-1 -1 " * 14) + "255 255" + os.linesep
 
-  print bgcolor
-  print fgcolor
-
-  file_contents = """
-    # GIMP curves tools settings
-    (time 0)
-    (channel red)
-    (curve
-      (curve-type smooth)
-      (n-points 17)
-      (points 34 0.0 0.0 {} {:.4f} {:.4f} 1.0 1.0)
-      (n-samples 256)
-      (samples 256 {})
-    )
-    (channel green)
-    (curve
-      (curve-type smooth)
-      (n-points 17)
-      (points 34 0.0 0.0 {} {:.4f} {:.4f} 1.0 1.0)
-      (n-samples 256)
-      (samples 256 {})
-    )
-    (channel blue)
-    (curve
-      (curve-type smooth)
-      (n-points 17)
-      (points 34 0.0 0.0 {} {:.4f} {:.4f} 1.0 1.0)
-      (n-samples 256)
-      (samples 256 {}) 
-    )
-  """.format(
-    points_unused, bgcolor[0] / 255.0, fgcolor[0] / 255.0, samples,
-    points_unused, bgcolor[1] / 255.0, fgcolor[1] / 255.0, samples,
-    points_unused, bgcolor[2] / 255.0, fgcolor[2] / 255.0, samples,
-  )
+  file_contents = "# GIMP Curves File" + os.linesep + default_line + red_line + green_line + blue_line + default_line
 
   with open(tempname, "w") as temp_file:
     print tempname
